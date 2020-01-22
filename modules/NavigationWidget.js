@@ -6,8 +6,9 @@ function NavigationWidget(dataAttribute) {
     this.dataAttribute = dataAttribute;
     this.elements = document.querySelectorAll('[' + this.dataAttribute + ']');
     this.navElements = [];
-    console.log(this.elements);
-    console.log(this.dataAttribute);
+    // console.log(this.elements);
+    // console.log(this.dataAttribute);
+    window.addEventListener("load", this.checkPosition.bind(this));
     $(window).scroll(this.checkPosition.bind(this));
 }
 
@@ -34,21 +35,21 @@ Object.assign(NavigationWidget.prototype, {
             });
             domElement.addEventListener("click", () => this.moveWindowTo(this.navElements[i].top));
         }
-        console.log(this.navElements);
-        
     },
     moveWindowTo: function(top){
         window.scrollTo(0,top);
     },
-    checkPosition: function(){ $(window).scrollTop();
-       
-        for(let i = 0; i<this.elements.length; i++){
-            this.navElements[i].navReference.classList.remove("active");
-            if(Number(this.navElements[i].top) <= Number($(window).scrollTop()) &&  Number($(window).scrollTop())<= Number(this.navElements[i].bottom)){
-                this.navElements[i].navReference.classList.add("active");
+    checkPosition: function(){ 
+        window.setTimeout(function (){
+            for(let i = 0; i<this.elements.length; i++){
+                if(Number(this.navElements[i].top) <= Number($(window).scrollTop()) &&  Number($(window).scrollTop())<= Number(this.navElements[i].bottom)){
+                    this.navElements[i].navReference.classList.add("active");
+                }
+                else{
+                    this.navElements[i].navReference.classList.remove("active");
+                }
             }
-        }
-        
+        }.bind(this), 200)
     }
 });
 
