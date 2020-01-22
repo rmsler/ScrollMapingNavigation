@@ -8,6 +8,7 @@ function NavigationWidget(dataAttribute) {
     this.navElements = [];
     console.log(this.elements);
     console.log(this.dataAttribute);
+    $(window).scroll(this.checkPosition.bind(this));
 }
 
 Object.assign(NavigationWidget.prototype, {
@@ -29,23 +30,22 @@ Object.assign(NavigationWidget.prototype, {
             this.navElements.push({
                 navReference: domElement,
                 top: currentElement.parentElement.getBoundingClientRect().top + $(window).scrollTop(),
-                bottom: currentElement.parentElement.getBoundingClientRect().bottom
+                bottom: currentElement.parentElement.getBoundingClientRect().bottom + $(window).scrollTop()
             });
             domElement.addEventListener("click", () => this.moveWindowTo(this.navElements[i].top));
         }
         console.log(this.navElements);
-        $(window).scroll(this.checkPosition.bind(this));
+        
     },
     moveWindowTo: function(top){
         window.scrollTo(0,top);
     },
-    checkPosition: function(){
-        $(window).scrollTop();
-        console.log("top is: "+$(window).scrollTop());
+    checkPosition: function(){ $(window).scrollTop();
+       
         for(let i = 0; i<this.elements.length; i++){
-            console.log("top "+this.navElements[i].top);
-            if($(window).scrollTop() < 0){
-
+            this.navElements[i].navReference.classList.remove("active");
+            if(Number(this.navElements[i].top) <= Number($(window).scrollTop()) &&  Number($(window).scrollTop())<= Number(this.navElements[i].bottom)){
+                this.navElements[i].navReference.classList.add("active");
             }
         }
         
