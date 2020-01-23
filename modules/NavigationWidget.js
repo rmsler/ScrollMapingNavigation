@@ -28,10 +28,12 @@ Object.assign(NavigationWidget.prototype, {
             name.appendChild(textchild);
             domElement.appendChild(name);
             $(wrapper).append(domElement);
+            let crtElRect = currentElement.parentElement.getBoundingClientRect();
+            let windowScrollTop = $(window).scrollTop();
             this.navElements.push({
                 navReference: domElement,
-                top: currentElement.parentElement.getBoundingClientRect().top + $(window).scrollTop(),
-                bottom: currentElement.parentElement.getBoundingClientRect().bottom + $(window).scrollTop()
+                top: Number(crtElRect.top + windowScrollTop),
+                bottom: Number(crtElRect.bottom + windowScrollTop)
             });
             domElement.addEventListener("click", () => this.moveWindowTo(this.navElements[i].top));
         }
@@ -41,11 +43,11 @@ Object.assign(NavigationWidget.prototype, {
     },
     checkPosition: function(){ 
         window.setTimeout(function (){
-            for(let i = 0; i<this.elements.length; i++){
-                if(Number(this.navElements[i].top) <= Number($(window).scrollTop()) &&  Number($(window).scrollTop())<= Number(this.navElements[i].bottom)){
+            let crtScrollTop = Number($(window).scrollTop())
+            for(let i = 0; i<this.navElements.length; i++) {
+                if (this.navElements[i].top <= crtScrollTop && crtScrollTop <= this.navElements[i].bottom) {
                     this.navElements[i].navReference.classList.add("active");
-                }
-                else{
+                } else {
                     this.navElements[i].navReference.classList.remove("active");
                 }
             }
